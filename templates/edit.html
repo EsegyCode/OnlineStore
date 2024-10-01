@@ -4,15 +4,26 @@
 <title>Редагувати товар</title>
 {% endblock %}
 
-
 {% block body %}
-<div class="container">
-     <h1>Редагувати товар</h1>
-    <form method="POST">
-        <input type="text" name="title" value="{{ item.title }}" placeholder="Назва товару">
-        <input type="text" name="price" value="{{ item.price }}" placeholder="Ціна товару">
-        <button type="submit">Зберегти</button>
-    </form>
-    <a href="/">Повернутись до списку</a>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="mb-4 text-center">Редагувати товар</h1>
+            <form method="POST" class="shadow p-4 rounded bg-light">
+                <div class="form-group mb-3">
+                    <label for="title" class="form-label">Назва товару</label>
+                    <input type="text" class="form-control" id="title" name="title" value="{{ item.title }}" placeholder="Введіть назву товару" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="price" class="form-label">Ціна товару</label>
+                    <input type="text" class="form-control" id="price" name="price" value="{{ item.price }}" placeholder="Введіть ціну товару" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Зберегти</button>
+            </form>
+            <div class="text-center mt-3">
+                <a href="/" class="btn btn-link">Повернутись до списку</a>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
