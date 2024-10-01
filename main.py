@@ -11,7 +11,7 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'login'  # Вказуємо, що неавторизовані користувачі будуть перенаправлені на 'login'
 
 # Модель користувача
 class User(db.Model, UserMixin):
@@ -30,7 +30,9 @@ class Item(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+# Головна сторінка магазину (лише для авторизованих користувачів)
 @app.route('/')
+@login_required
 def index():
     items = Item.query.order_by(Item.price).all()
     return render_template('index.html', data=items)
@@ -108,7 +110,8 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
-            return redirect(url_for('index'))
+            next_page = request.args.get('next')  # Отримуємо наступну сторінку, якщо користувач був перенаправлений
+            return redirect(next_page) if next_page else redirect(url_for('index'))  # Переходимо на next або головну
         else:
             flash('Неправильний логін або пароль.')
     return render_template('login.html')
@@ -118,7 +121,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 
 if __name__ == "__main__":
     app.run(debug=True)
