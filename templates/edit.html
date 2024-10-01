@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<title>Редагувати товар</title>
+{% endblock %}
+
+
+{% block body %}
+<div class="container">
+     <h1>Редагувати товар</h1>
+    <form method="POST">
+        <input type="text" name="title" value="{{ item.title }}" placeholder="Назва товару">
+        <input type="text" name="price" value="{{ item.price }}" placeholder="Ціна товару">
+        <button type="submit">Зберегти</button>
+    </form>
+    <a href="/">Повернутись до списку</a>
+</div>
+{% endblock %}
