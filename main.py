@@ -1,30 +1,29 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+app = Flask(__name__) #Тут настройки бд
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///OnlineShop.bd'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'your_secret_key'  # Для захисту сесій
 db = SQLAlchemy(app)
 
-# Модель товару
+# Модель товару в Базі данних
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     price = db.Column(db.Integer, nullable=False)
     isActive = db.Column(db.Boolean, default=True)
 
-# Головна сторінка магазину
+# Головна сторінка мого магазину
 @app.route('/')
 def index():
     items = Item.query.order_by(Item.price).all()
     return render_template('index.html', data=items)
 
-@app.route('/about')
+@app.route('/about') #Інформація про компанію
 def about():
     return render_template('about.html')
 
-# Створення товару
+# Створення товарів в магазе
 @app.route('/create', methods=['POST', 'GET'])
 def create():
     if request.method == "POST":
@@ -39,7 +38,7 @@ def create():
             return "Помилка в роботі БД"
     return render_template('create.html')
 
-# Редагування товару
+# Редагування товарів
 @app.route('/edit/<int:id>', methods=['POST', 'GET'])
 def edit(id):
     item = Item.query.get_or_404(id)
@@ -50,10 +49,10 @@ def edit(id):
             db.session.commit()
             return redirect('/')
         except:
-            return "Помилка під час редагування товару"
+            return "Помилка під час редагування"
     return render_template('edit.html', item=item)
 
-# Видалення товару
+# Видалення товару з магазину
 @app.route('/delete/<int:id>')
 def delete(id):
     item = Item.query.get_or_404(id)
